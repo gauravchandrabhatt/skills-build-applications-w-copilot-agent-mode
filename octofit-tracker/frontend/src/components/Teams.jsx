@@ -1,0 +1,6 @@
+import { useEffect, useState } from 'react'
+import { fetchCollection } from '../api.js'
+import { CollectionPage, EmptyState, ErrorState } from './Activities.jsx'
+
+function Teams() { const [teams, setTeams] = useState([]); const [error, setError] = useState(''); useEffect(() => { fetchCollection('teams').then(setTeams).catch((reason) => setError(reason.message)) }, []); return <CollectionPage eyebrow="Find your people" title="Teams" intro="Shared goals make the work lighter." error={error}>{error ? <ErrorState message={error} /> : <div className="card-grid">{teams.map((team) => <article className="data-card" key={team._id}><div className="team-icon">{(team.name || 'T')[0]}</div><h2>{team.name}</h2><p>{team.description || 'Ready for a new challenge.'}</p><footer><span>{team.members?.length ?? 0} members</span><strong>{team.totalPoints ?? 0} pts</strong></footer></article>)}{!teams.length && <EmptyState text="No teams have been created yet." />}</div>}</CollectionPage> }
+export default Teams
